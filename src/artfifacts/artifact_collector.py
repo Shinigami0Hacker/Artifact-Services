@@ -18,6 +18,14 @@ class ProtocolType(Enum):
     HTTP_v2 = 3
     GOOGLE_DRIVE = 4
 
+class Scheduler():
+    """
+    Set how long the function cover by wrapper
+    """
+    EVERY_FUNCTION_CALL = 0
+    EVERY_COLLECTOR_CALL = 1
+    COLLECTER_BUILD = 2
+
 class MetadataBuilder():
     def __init__(self, runtime_id) -> None:
         self.runtime_id = runtime_id
@@ -63,10 +71,11 @@ class ProtocolConnection:
         pass
 
 class ArtifactPayload:
-    def __init__(self, payload: any, name: str, *, id: str) -> None:
+    def __init__(self, payload: any, name: str, id: str, *, scheduler) -> None:
         self.id = id
         self.name = name
         self.__payload = payload
+        self.temporary = []
         self.__serializer = None 
 
     @property.getter
@@ -121,7 +130,7 @@ class ArtifactColector:
     def artifact_summary(self):
         generate_table(self.__payloads)
 
-    def add_artifact(self, id, name):
+    def add_artifact(self, id, name, *, scheduler: Scheduler):
         """
         The decorator using for capture the output of the function and append it into the collector.
         @params:

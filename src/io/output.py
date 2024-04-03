@@ -1,0 +1,2 @@
+class OutputWrapper:
+    pass

@@ -1,0 +1,1 @@
+from src.utils.graphic import generate_table
